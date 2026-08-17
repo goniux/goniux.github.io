@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+<section class="hero">
+  <p class="eyebrow">CYBERSECURITY • REVERSE ENGINEERING • RESEARCH</p>
+  <h1>Reversed by Goni<span class="cursor">_</span></h1>
+  <p class="hero-text">{{ site.description }}</p>
+  <div class="hero-links">
+    <a href="{{ '/about/' | relative_url }}">About</a>
+    <a href="https://github.com/goniux" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</section>
+
+<section class="posts-section">
+  <div class="section-heading">
+    <h2>Latest research</h2>
+    <span>{{ site.posts | size }} posts</span>
+  </div>
+
+  {% if site.posts.size > 0 %}
+    <div class="post-list">
+      {% for post in site.posts %}
+        {% include post-card.html post=post %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No posts yet.</p>
+      <p>Your first writeup goes in <code>_posts/</code>.</p>
+    </div>
+  {% endif %}
+</section>

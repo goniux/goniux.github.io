@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://goniux.github.io/sitemap.xml
