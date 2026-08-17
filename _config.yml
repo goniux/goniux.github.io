@@ -1,7 +1,0 @@
-title: "Reversed by Goni"
-description: "Cybersecurity, Reverse Engineering & Security Research"
-url: "https://goniux.github.io"
-baseurl: ""
-
-markdown: kramdown
-permalink: /posts/:title/
