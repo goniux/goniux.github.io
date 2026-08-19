@@ -6,15 +6,9 @@ layout: default
   <div class="boot-line" id="boot-status">[ SYSTEM READY ]</div>
   <p class="eyebrow">DIGITAL RESEARCH ARCHIVE // MOBILE • REVERSE ENGINEERING • SECURITY</p>
 
-  <div class="ascii-title" aria-label="Reversed by Goni">
-<pre>
-██████╗ ███████╗██╗   ██╗███████╗██████╗ ███████╗██████╗
-██╔══██╗██╔════╝██║   ██║██╔════╝██╔══██╗██╔════╝██╔══██╗
-██████╔╝█████╗  ██║   ██║███████╗██║  ██║█████╗  ██║  ██║
-██╔══██╗██╔══╝  ╚██╗ ██╔╝╚════██║██║  ██║██╔══╝  ██║  ██║
-██║  ██║███████╗ ╚████╔╝ ███████║██████╔╝██████╔╝██████╔╝
-╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝╚═════╝ ╚══════╝╚═════╝
-</pre>
+  <div class="brand-title" aria-label="Reversed by Goni">
+    <span>REVERSED</span>
+    <span>BY GONI</span>
   </div>
 
   <div class="hero-copy">
@@ -32,17 +26,25 @@ layout: default
       <span>reversed@archive:~</span>
       <span>● ● ●</span>
     </div>
+
     <div class="terminal-output" id="terminal-output">
-      <div>REVERSED ARCHIVE // ONLINE</div>
-      <div>Type <strong>help</strong> to explore.</div>
+      <div class="success">{{ site.data.terminal.welcome }}</div>
+      <div>{{ site.data.terminal.help_intro }}</div>
       <br>
     </div>
+
     <form class="terminal-form" id="terminal-form">
       <span class="prompt">goni@reversed:~$</span>
       <input id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Archive command">
     </form>
   </div>
 </section>
+
+<!-- Terminal configuration lives in _data/terminal.yml.
+     Edit that file from GitHub to change manifesto/help/rickroll text. -->
+<script>
+  window.REVERSED_TERMINAL = {{ site.data.terminal | jsonify }};
+</script>
 
 <section class="archive-section" id="archive">
   <div class="section-heading">
@@ -76,7 +78,17 @@ layout: default
 
 <section class="manifesto">
   <p class="eyebrow">ARCHIVE NOTE</p>
-  <blockquote>
-    "Understanding machines by breaking them apart and rebuilding them."
-  </blockquote>
+  <blockquote>{{ site.data.terminal.commands.manifesto }}</blockquote>
 </section>
+
+<div class="rickroll-modal" id="rickroll-modal" aria-hidden="true">
+  <div class="rickroll-box" role="dialog" aria-modal="true" aria-labelledby="rickroll-title">
+    <button class="rickroll-close" id="rickroll-close" type="button" aria-label="Close">×</button>
+    <p class="eyebrow">TERMINAL EVENT</p>
+    <h2 id="rickroll-title">{{ site.data.terminal.rickroll.title }}</h2>
+    <p id="rickroll-message">{{ site.data.terminal.rickroll.message }}</p>
+    <button class="rickroll-button" id="rickroll-button" type="button">
+      [ {{ site.data.terminal.rickroll.button }} ]
+    </button>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+# Edit this file from GitHub to change terminal text.
+# After pushing, GitHub Pages rebuilds the site automatically.
+
+welcome: "REVERSED ARCHIVE // ONLINE"
+help_intro: 'Type "help" to explore.'
+
+commands:
+  help: |
+    AVAILABLE COMMANDS
+
+    archive    browse the research archive
+    about      learn about the researcher
+    github     open the source repository
+    clear      clear the terminal
+    whoami     identify the operator
+    manifesto  open the archive note
+    home       return to the top
+
+  whoami: "visitor // curiosity detected"
+  manifesto: "Understanding machines by breaking them apart and rebuilding them."
+
+rickroll:
+  title: "⚠ UNAUTHORIZED PATH"
+  message: "You weren't supposed to be here."
+  button: "REVEAL THE TRUTH"
+  url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
