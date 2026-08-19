@@ -3,31 +3,80 @@ layout: default
 ---
 
 <section class="hero">
-  <p class="eyebrow">CYBERSECURITY • REVERSE ENGINEERING • RESEARCH</p>
-  <h1>Reversed by Goni<span class="cursor">_</span></h1>
-  <p class="hero-text">{{ site.description }}</p>
-  <div class="hero-links">
-    <a href="{{ '/about/' | relative_url }}">About</a>
-    <a href="https://github.com/goniux" target="_blank" rel="noopener">GitHub ↗</a>
+  <div class="boot-line" id="boot-status">[ SYSTEM READY ]</div>
+  <p class="eyebrow">DIGITAL RESEARCH ARCHIVE // MOBILE • REVERSE ENGINEERING • SECURITY</p>
+
+  <div class="ascii-title" aria-label="Reversed by Goni">
+<pre>
+██████╗ ███████╗██╗   ██╗███████╗██████╗ ███████╗██████╗
+██╔══██╗██╔════╝██║   ██║██╔════╝██╔══██╗██╔════╝██╔══██╗
+██████╔╝█████╗  ██║   ██║███████╗██║  ██║█████╗  ██║  ██║
+██╔══██╗██╔══╝  ╚██╗ ██╔╝╚════██║██║  ██║██╔══╝  ██║  ██║
+██║  ██║███████╗ ╚████╔╝ ███████║██████╔╝██████╔╝██████╔╝
+╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝╚═════╝ ╚══════╝╚═════╝
+</pre>
+  </div>
+
+  <div class="hero-copy">
+    <p>A personal archive of experiments, failures and discoveries made while understanding the machines around us.</p>
+  </div>
+
+  <button class="enter-button" id="enter-archive" type="button">
+    <span>[ ENTER ARCHIVE ]</span>
+  </button>
+</section>
+
+<section class="terminal-wrap" id="terminal-section">
+  <div class="terminal-window">
+    <div class="terminal-bar">
+      <span>reversed@archive:~</span>
+      <span>● ● ●</span>
+    </div>
+    <div class="terminal-output" id="terminal-output">
+      <div>REVERSED ARCHIVE // ONLINE</div>
+      <div>Type <strong>help</strong> to explore.</div>
+      <br>
+    </div>
+    <form class="terminal-form" id="terminal-form">
+      <span class="prompt">goni@reversed:~$</span>
+      <input id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Archive command">
+    </form>
   </div>
 </section>
 
-<section class="posts-section">
+<section class="archive-section" id="archive">
   <div class="section-heading">
-    <h2>Latest research</h2>
-    <span>{{ site.posts | size }} posts</span>
+    <div>
+      <p class="eyebrow">TRANSMISSIONS</p>
+      <h2>Latest research</h2>
+    </div>
+    <span>{{ site.posts | size }} indexed</span>
   </div>
 
   {% if site.posts.size > 0 %}
     <div class="post-list">
       {% for post in site.posts %}
-        {% include post-card.html post=post %}
+        <a class="post-card" href="{{ post.url | relative_url }}">
+          <div class="post-card-top">
+            <span>{{ post.category | default: "RESEARCH" }}</span>
+            <time>{{ post.date | date: "%d %b %Y" }}</time>
+          </div>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</p>
+          {% if post.tags %}
+          <div class="tags">
+            {% for tag in post.tags %}<span>#{{ tag }}</span>{% endfor %}
+          </div>
+          {% endif %}
+        </a>
       {% endfor %}
     </div>
-  {% else %}
-    <div class="empty-state">
-      <p>No posts yet.</p>
-      <p>Your first writeup goes in <code>_posts/</code>.</p>
-    </div>
   {% endif %}
+</section>
+
+<section class="manifesto">
+  <p class="eyebrow">ARCHIVE NOTE</p>
+  <blockquote>
+    "Understanding machines by breaking them apart and rebuilding them."
+  </blockquote>
 </section>

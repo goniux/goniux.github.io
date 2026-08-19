@@ -8,13 +8,12 @@
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 </head>
 <body>
+  <div class="noise"></div>
   {% include navbar.html %}
-
-  <main class="site-main">
-    {{ content }}
-  </main>
-
+  <main class="site-main">{{ content }}</main>
   {% include footer.html %}
+  <script src="{{ '/assets/js/boot.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

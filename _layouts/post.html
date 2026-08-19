@@ -8,18 +8,13 @@ layout: default
     <h1>{{ page.title }}</h1>
     <div class="post-meta">
       <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d %B %Y" }}</time>
-      {% if page.tags %}
-        <span>•</span>
-        <span>{{ page.tags | join: " · " }}</span>
-      {% endif %}
+      {% if page.tags %}<span>•</span><span>{{ page.tags | join: " · " }}</span>{% endif %}
     </div>
   </header>
 
-  <div class="post-content">
-    {{ content }}
-  </div>
+  <div class="post-content">{{ content }}</div>
 
   <footer class="post-footer">
-    <a href="{{ '/' | relative_url }}">← Back to research</a>
+    <a href="{{ '/' | relative_url }}">← Return to archive</a>
   </footer>
 </article>
