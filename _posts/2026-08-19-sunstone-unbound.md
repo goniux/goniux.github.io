@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Sunstone Unbound: Rooting Redmi Note 12 5G"
-date: 2026-08-19 21:30:00 +0530
+date: 2026-08-19 
 category: "Mobile Security"
 tags: [android, xiaomi, hyperos, rooting, magisk, adb, mobile-security, security-research]
 description: "My documented Xiaomi HyperOS bootloader-unlock and rooting workflow, including two community unlock-request methods and the lessons I learned getting the timing right."
