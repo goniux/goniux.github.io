@@ -76,7 +76,7 @@ That immediately raised the first question:
 
 > **Why would an application presenting itself as an update need a VPN?**
 
-For many it would be quiet obvious that VPN must be hidden network traffic but we can't just conclude without any proof.
+For many it would be quiet obvious that VPN must be hiding network traffic but we can't just conclude without any proof.
 
 So I kept going.
 
