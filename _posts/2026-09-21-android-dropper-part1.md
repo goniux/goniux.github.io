@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Inside an Android Dropper: From Fake Update to Reconstructed Payload"
+title: "Inside an Android Dropper: Fake Updates, VPN Traffic Sinks, and Runtime Payload Reconstruction"
 date: 2026-09-21
 category: "Mobile Security"
 tags: [android, malware-analysis, reverse-engineering, frida, jadx, dynamic-analysis, static-analysis, apk]
-description: "A practical investigation into an Android dropper that reconstructs a second-stage APK at runtime, stages it briefly on disk, and installs it through Android's PackageInstaller."
+description: "A practical investigation into an Android dropper, its VPN/TUN component, runtime payload reconstruction, transient APK staging, and second-stage installation."
 ---
 
 # Inside an Android Dropper
@@ -25,7 +25,7 @@ A practical investigation into runtime unpacking, transient APK artifacts, Frida
 | **MD5** | `635a75e3bef45740e20deda24fe7eca1` |
 | **Size** | ~1424 KB |
 | **Test device** | Redmi Note 12 5G |
-| **Environment** | Rooted LineageOS test device |
+| **Environment** | Rooted LineageOS Android16 |
 | **Tools** | ADB, Frida, JADX, PCAPdroid, HTTP Toolkit, Python |
 
 The first step was intentionally simple:
@@ -68,7 +68,7 @@ assets/images/rbl/02-opening-vpn.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/02-opening-vpn.png' | relative_url }}" alt="Update-style interface and Android VPN permission prompt">
+  <img src="{{ '/assets/images/rbl/02-install.png' | relative_url }}" alt="Update-style interface and Android VPN permission prompt">
   <figcaption>The initial update-style interface followed by the Android VPN permission request.</figcaption>
 </figure>
 
@@ -76,7 +76,7 @@ That immediately raised the first question:
 
 > **Why would an application presenting itself as an update need a VPN?**
 
-At this stage, that was only a hypothesis.
+For many it would be quiet obvious that VPN must be hidden network traffic but we can't just conclude without any proof.
 
 So I kept going.
 
@@ -96,11 +96,11 @@ The first network experiment did not reveal an obvious payload download associat
 
 <!-- IMAGE SLOT
 Save the update screen + application storage screenshot as:
-assets/images/rbl/03-update-storage.png
+assets/images/rbl/03-install.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/03-update-storage.png' | relative_url }}" alt="Update interface and application storage state">
+  <img src="{{ '/assets/images/rbl/03-install.png' | relative_url }}" alt="Update interface and application storage state">
   <figcaption>The update-style interface alongside the application's storage state during testing.</figcaption>
 </figure>
 
@@ -126,7 +126,7 @@ assets/images/rbl/04-tun-gallery.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/04-tun-gallery.png' | relative_url }}" alt="tun0 interface and gallery permission prompt">
+  <img src="{{ '/assets/images/rbl/04-install.png' | relative_url }}" alt="tun0 interface and gallery permission prompt">
   <figcaption>The observed TUN interface and the application's gallery/media access prompt.</figcaption>
 </figure>
 
@@ -191,7 +191,7 @@ assets/images/rbl/05-payload-pull.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/05-payload-pull.png' | relative_url }}" alt="Pulling the installed second-stage APK">
+  <img src="{{ '/assets/images/rbl/05-install.png' | relative_url }}" alt="Pulling the installed second-stage APK">
   <figcaption>The second-stage APK recovered from the installed package on the research device.</figcaption>
 </figure>
 
@@ -224,7 +224,7 @@ assets/images/rbl/06-frida-write.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/06-frida-write.png' | relative_url }}" alt="Frida intercepting the APK write">
+  <img src="{{ '/assets/images/rbl/06-install.png' | relative_url }}" alt="Frida intercepting the APK write">
   <figcaption>Frida intercepting the large APK-sized write and showing the Java/native I/O backtrace.</figcaption>
 </figure>
 
@@ -264,7 +264,7 @@ assets/images/rbl/07-apk-hexdump.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/07-apk-hexdump.png' | relative_url }}" alt="APK buffer beginning with PK 03 04 and containing AndroidManifest.xml">
+  <img src="{{ '/assets/images/rbl/07-install.png' | relative_url }}" alt="APK buffer beginning with PK 03 04 and containing AndroidManifest.xml">
   <figcaption>The captured buffer begins with <code>PK 03 04</code> and contains <code>AndroidManifest.xml</code>, identifying it as an APK/ZIP archive.</figcaption>
 </figure>
 
@@ -295,7 +295,7 @@ assets/images/rbl/08-memory-range.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/08-memory-range.png' | relative_url }}" alt="Anonymous read-write memory range containing the APK buffer">
+  <img src="{{ '/assets/images/rbl/08-install.png' | relative_url }}" alt="Anonymous read-write memory range containing the APK buffer">
   <figcaption>The APK buffer resides in an anonymous read/write memory range.</figcaption>
 </figure>
 
@@ -314,7 +314,7 @@ assets/images/rbl/09-memory-inspector.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/09-memory-inspector.png' | relative_url }}" alt="Frida memory inspection at multiple APK offsets">
+  <img src="{{ '/assets/images/rbl/09-install.png' | relative_url }}" alt="Frida memory inspection at multiple APK offsets">
   <figcaption>Inspecting multiple offsets inside the in-memory object to establish that the APK data spans the buffer.</figcaption>
 </figure>
 
@@ -360,7 +360,7 @@ assets/images/rbl/10-transient-artifacts.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/10-transient-artifacts.png' | relative_url }}" alt="Transient m-bin artifacts and cf.xml package metadata">
+  <img src="{{ '/assets/images/rbl/10-install.png' | relative_url }}" alt="Transient m-bin artifacts and cf.xml package metadata">
   <figcaption>Runtime filesystem activity revealing temporary <code>m*.bin</code> files alongside persistent artifacts such as <code>hyzp.bin</code>, <code>cf.xml</code>, and <code>.ipk</code>.</figcaption>
 </figure>
 
@@ -421,7 +421,7 @@ assets/images/rbl/11-rbl-all.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/11-rbl-all.png' | relative_url }}" alt="Frida all-in-one runtime observer">
+  <img src="{{ '/assets/images/rbl/11-install.png' | relative_url }}" alt="Frida all-in-one runtime observer">
   <figcaption>The refined all-in-one observer instrumenting file, write, network, ART/DEX, and memory events.</figcaption>
 </figure>
 
@@ -562,7 +562,7 @@ assets/images/rbl/12-payload-capture.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/12-payload-capture.png' | relative_url }}" alt="Captured payload and transient artifact files">
+  <img src="{{ '/assets/images/rbl/12-install.png' | relative_url }}" alt="Captured payload and transient artifact files">
   <figcaption>The capture directory containing the recovered payload, runtime DEX artifacts, and transient-file captures.</figcaption>
 </figure>
 
@@ -637,7 +637,7 @@ assets/images/rbl/13-assets.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/13-assets.png' | relative_url }}" alt="Interesting encrypted-looking assets in JADX">
+  <img src="{{ '/assets/images/rbl/13-install.png' | relative_url }}" alt="Interesting encrypted-looking assets in JADX">
   <figcaption>The original APK contains multiple obfuscated-looking assets with non-descriptive filenames.</figcaption>
 </figure>
 
@@ -673,7 +673,7 @@ assets/images/rbl/14-loader-classes.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/14-loader-classes.png' | relative_url }}" alt="jfpxv and hulfg loader classes in JADX">
+  <img src="{{ '/assets/images/rbl/14-install.png' | relative_url }}" alt="jfpxv and hulfg loader classes in JADX">
   <figcaption>The two classes that exposed the payload reconstruction and cryptographic logic.</figcaption>
 </figure>
 
@@ -743,7 +743,7 @@ assets/images/rbl/15-decryptor.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/15-decryptor.png' | relative_url }}" alt="Python decryptor producing the recovered APK">
+  <img src="{{ '/assets/images/rbl/15-install.png' | relative_url }}" alt="Python decryptor producing the recovered APK">
   <figcaption>The offline decryptor reconstructing the second-stage APK from the embedded asset.</figcaption>
 </figure>
 
@@ -795,7 +795,7 @@ assets/images/rbl/16-hyzp-jadx.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/16-hyzp-jadx.png' | relative_url }}" alt="hyzp.bin opened in JADX">
+  <img src="{{ '/assets/images/rbl/16-install.png' | relative_url }}" alt="hyzp.bin opened in JADX">
   <figcaption>The runtime-generated DEX reveals the classes responsible for VPN setup, payload loading, installation, and handoff.</figcaption>
 </figure>
 
@@ -841,7 +841,7 @@ assets/images/rbl/17-vpn-service.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/17-vpn-service.png' | relative_url }}" alt="ybgruj VpnService class in JADX">
+  <img src="{{ '/assets/images/rbl/17-install.png' | relative_url }}" alt="ybgruj VpnService class in JADX">
   <figcaption>The obfuscated <code>ybgruj</code> class implements the Android VPN/TUN service.</figcaption>
 </figure>
 
@@ -875,7 +875,7 @@ assets/images/rbl/18-vpn-bypass.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/18-vpn-bypass.png' | relative_url }}" alt="Hard-coded application bypass list">
+  <img src="{{ '/assets/images/rbl/18-install.png' | relative_url }}" alt="Hard-coded application bypass list">
   <figcaption>The VPN service excludes a hard-coded set of messaging, calling, and communication applications.</figcaption>
 </figure>
 
@@ -931,7 +931,7 @@ assets/images/rbl/19-payload-installer.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/19-payload-installer.png' | relative_url }}" alt="PayloadInstallerActivity functional mapping">
+  <img src="{{ '/assets/images/rbl/19-install.png' | relative_url }}" alt="PayloadInstallerActivity functional mapping">
   <figcaption>Functional mapping of the main installer activity reconstructed from the obfuscated class.</figcaption>
 </figure>
 
@@ -979,7 +979,7 @@ assets/images/rbl/20-payload-receiver.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/20-payload-receiver.png' | relative_url }}" alt="PayloadInstallReceiver functional mapping">
+  <img src="{{ '/assets/images/rbl/20-install.png' | relative_url }}" alt="PayloadInstallReceiver functional mapping">
   <figcaption>The receiver handles installation results and repeatedly attempts to launch the installed payload.</figcaption>
 </figure>
 
@@ -1025,7 +1025,7 @@ assets/images/rbl/21-payload-loader.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/21-payload-loader.png' | relative_url }}" alt="PayloadLoader functional mapping">
+  <img src="{{ '/assets/images/rbl/21-install.png' | relative_url }}" alt="PayloadLoader functional mapping">
   <figcaption>The loader reconstructs the second-stage APK from the embedded encrypted asset.</figcaption>
 </figure>
 
@@ -1064,7 +1064,7 @@ assets/images/rbl/22-obfuscated-constants.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/22-obfuscated-constants.png' | relative_url }}" alt="ObfuscatedConstants functional mapping">
+  <img src="{{ '/assets/images/rbl/22-install.png' | relative_url }}" alt="ObfuscatedConstants functional mapping">
   <figcaption>The shared obfuscation/constants class decoded during static analysis.</figcaption>
 </figure>
 
@@ -1119,7 +1119,7 @@ assets/images/rbl/23-final-architecture.png
 -->
 
 <figure>
-  <img src="{{ '/assets/images/rbl/23-final-architecture.png' | relative_url }}" alt="Final reconstructed dropper architecture">
+  <img src="{{ '/assets/images/rbl/23-install.png' | relative_url }}" alt="Final reconstructed dropper architecture">
   <figcaption>The final architecture reconstructed by combining dynamic and static analysis.</figcaption>
 </figure>
 
