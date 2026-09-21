@@ -127,10 +127,10 @@ assets/images/rbl/04-tun-gallery.png
 
 <figure>
   <img src="{{ '/assets/images/rbl/04-install.png' | relative_url }}" alt="tun0 interface and gallery permission prompt">
-  <figcaption>The observed TUN interface and the application's gallery/media access prompt.</figcaption>
+  <figcaption>The observed TUN interface.</figcaption>
 </figure>
 
-The initial notes recorded a VPN address of `92.168.50.2/32`. During later static analysis, the corresponding obfuscated configuration resolved to `192.168.50.2/32`; verify the exact runtime value against the original terminal screenshot before publishing.
+The initial notes recorded a VPN address of `192.168.50.2/32`. During later static analysis, the corresponding obfuscated configuration resolved to `192.168.50.2/32`; verify the exact runtime value against the original terminal screenshot before publishing.
 
 At this point I had a hypothesis:
 
@@ -163,7 +163,7 @@ The objective was simple:
 
 Rather than guessing where the APK was hidden, I wanted the runtime to tell me.
 
-Eventually, it did.
+Eventually, it did,lol!
 
 Before continuing, I also checked the package installed by the dropper.
 
@@ -195,7 +195,7 @@ assets/images/rbl/05-payload-pull.png
   <figcaption>The second-stage APK recovered from the installed package on the research device.</figcaption>
 </figure>
 
-The rest of the article focuses on how that artifact was produced.
+The rest of the article focuses on how that artifact was produced(very interesting!) and Working of VpnService (a bait?-maybe)
 
 ---
 
